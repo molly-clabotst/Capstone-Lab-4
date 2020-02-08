@@ -107,3 +107,9 @@ for avg in avg_age:
 print('\nCats, sorted by name')
 for cat in Cat.select().order_by(Cat.name):
     print(cat)
+
+
+
+# Drop Table
+Cat.drop_table()
+print('\nCat table dropped. Ready for rerun.')
