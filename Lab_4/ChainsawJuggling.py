@@ -29,8 +29,8 @@ def main():
             find_all_records()
         elif choice == '4':
             update_record()
-        # elif choice == 4:
-        #     delete_record()
+        elif choice == '5':
+            delete_record()
         else:
             print('Please enter a valid menu option, numbers 1-5 or q for quit.\n')
 
@@ -80,7 +80,19 @@ def update_record():
         return
     search_for_RH(name)
     
-# def delete_record():
+def delete_record():
+
+    while True:
+        name = input("What is the name of the person who's record you want to delete? ")
+        search_for_RH(name)
+        confirmation = input('Are you sure this is the record you want to delete?(y=yes, n=no) ')
+        
+        if confirmation.upper() == 'Y':
+            break
+    
+    rows_deleted = Record.delete().where(Record.name==name).execute()
+    if rows_deleted == 0:
+        print('There was an error. You might want to check on what is in the records and contact your developer.')
 
 if __name__ == '__main__':
     main()
