@@ -125,6 +125,14 @@ rows_deleted = Cat.delete().where(Cat.name == 'Fluffy').execute()
 # Can leave this out if info is unecessary
 print('Rows deleted: ', rows_deleted)
 
+print('\nDeleting all cats')
+rows_deleted = Cat.delete().execute()
+print('Rows deleted: ', rows_deleted)
+
+print('\nEverthing in the database:')
+for cat in Cat.select(Cat):
+    print(cat)
+
 # Drop Table
 Cat.drop_table()
 print('\nCat table dropped. Ready for rerun.')
