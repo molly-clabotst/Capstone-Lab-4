@@ -93,6 +93,7 @@ def delete_record():
     rows_deleted = Record.delete().where(Record.name==name).execute()
     if rows_deleted == 0:
         print('There was an error. You might want to check on what is in the records and contact your developer.')
+    print(f'The record for {name} was deleted.\n')
 
 if __name__ == '__main__':
     main()
