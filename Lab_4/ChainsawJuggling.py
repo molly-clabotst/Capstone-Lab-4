@@ -31,6 +31,8 @@ def main():
             update_record()
         # elif choice == 4:
         #     delete_record()
+        else:
+            print('Please enter a valid menu option, numbers 1-5 or q for quit.\n')
 
     print('\nThanks for using the Chainsaw Juggling Record Database\n')
 
@@ -46,10 +48,12 @@ def add_new_record_holder():
     juggler.save()
     print(f"{juggler.name}s' has been saved\n")
 
-def search_for_RH():
-    name = input('What is the name of the juggler? ')
-    while len(name)<2:
-        name = input('Please enter the full name of the Chainsaw Juggler\n')    
+def search_for_RH(name = ''):
+    
+    if len(name)==0:
+        name = input('What is the name of the juggler? ')
+        while len(name)<2:
+            name = input('Please enter the full name of the Chainsaw Juggler\n')    
     
     data = Record.select().where(Record.name==name).limit(1)
     if data.exists() == False:
@@ -62,7 +66,7 @@ def find_all_records():
     data = Record.select()
     if data.exists():
         for record in data:
-            print(record)
+            print(str(record)+'\n')
     else:
         print('There are no records. Please enter some if you know of them!\n')
 
@@ -73,6 +77,8 @@ def update_record():
     rows_changed = Record.update(record=record).where(Record.name==name).execute()
     if rows_changed==0:
         print(f"Sorry {name} isn't in our records. Try entering them instead")
+        return
+    search_for_RH(name)
 # def delete_record():
 
 if __name__ == '__main__':
