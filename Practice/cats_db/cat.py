@@ -119,7 +119,12 @@ query = Cat.select().where(Cat.age ==5).order_by(Cat.color).limit(2)
 for cat in query:
     print(cat)
 
-    
+# Deleting
+print('\nDeleting Fluffy')
+rows_deleted = Cat.delete().where(Cat.name == 'Fluffy').execute()
+# Can leave this out if info is unecessary
+print('Rows deleted: ', rows_deleted)
+
 # Drop Table
 Cat.drop_table()
 print('\nCat table dropped. Ready for rerun.')
