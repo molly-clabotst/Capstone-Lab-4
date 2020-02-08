@@ -79,6 +79,7 @@ def update_record():
         print(f"Sorry {name} isn't in our records. Try entering them instead")
         return
     search_for_RH(name)
+    
 # def delete_record():
 
 if __name__ == '__main__':
