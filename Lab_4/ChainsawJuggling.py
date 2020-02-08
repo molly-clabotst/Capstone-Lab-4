@@ -2,31 +2,33 @@ from peewee import *
 
 db = SqliteDatabase('jugglers.sqlite')
 
-class Records(Model):
+class Record(Model):
     name = CharField()
     country = CharField()
-    rec = CharField()
+    record = CharField()
 
     class Meta:
         database = db
     
     def __str__(self):
-        return f"{self.name} from {self.country}s' record is {self.rec}."
+        return f"{self.name} from {self.country}s' record is {self.record}."
 
 db.connect()
-db.create_tables([Records])
+db.create_tables([Record])
 
 def main():
     choice = ' '
     while choice.upper()!= 'Q':
-        choice = input('Would you like to...\n1.Add New Record Holder\n2.Search For Record Holder\n3.Update A Record\n4.Delete a Record\nQ.Quit\n\n')
+        choice = input('Would you like to...\n1.Add New Record Holder\n2.Search For Record Holder\n3.Show All Records\n4.Update A Record\n5.Delete a Record\nQ.Quit\n\n')
         print()
         if choice == '1':
             add_new_record_holder()
         elif choice == '2':
             search_for_RH()
-        # elif choice == 3:
-        #     update_record()
+        elif choice =='3':
+            find_all_records()
+        elif choice == '4':
+            update_record()
         # elif choice == 4:
         #     delete_record()
 
@@ -40,7 +42,7 @@ def add_new_record_holder():
     if len(name)<2 or len(country)<2 or record.isnumeric==False or len(record)==0:
         print('Please enter full name, country name and a number to input a record.\n')
         return
-    juggler = Records(name=name, country=country, rec=record)
+    juggler = Record(name=name, country=country, record=record)
     juggler.save()
     print(f"{juggler.name}s' has been saved\n")
 
@@ -49,16 +51,28 @@ def search_for_RH():
     while len(name)<2:
         name = input('Please enter the full name of the Chainsaw Juggler\n')    
     
-    data = Records.select().where(Records.name==name).limit(1)
+    data = Record.select().where(Record.name==name).limit(1)
     if data.exists() == False:
-        print(f'\nSorry there was no entry for {name}.')
+        print(f'\nSorry there was no entry for {name}.\n')
 
     for dPoint in data:
         print('\n'+str(dPoint)+'\n')
     
+def find_all_records():
+    data = Record.select()
+    if data.exists():
+        for record in data:
+            print(record)
+    else:
+        print('There are no records. Please enter some if you know of them!\n')
 
-# def update_record():
-
+def update_record():
+    name = input("What is the name of the person whos' record you want to update? ")
+    record = input('What is the new number of catches? ')
+    print()
+    rows_changed = Record.update(record=record).where(Record.name==name).execute()
+    if rows_changed==0:
+        print(f"Sorry {name} isn't in our records. Try entering them instead")
 # def delete_record():
 
 if __name__ == '__main__':
