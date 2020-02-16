@@ -14,13 +14,13 @@ class View:
             if choice == '1':
                 add_new_record_holder(self)
             elif choice == '2':
-                self.search_for_RH()
+                search_for_RH(self)
             elif choice =='3':
-                self.find_all_records()
+                find_all_records(self)
             elif choice == '4':
-                self.update_record()
+                update_record(self)
             elif choice == '5':
-                self.delete_record()
+                delete_record(self)
             elif choice == 'q':
                 print('\nThanks for using the Chainsaw Juggling Record Database\n')
             else:
