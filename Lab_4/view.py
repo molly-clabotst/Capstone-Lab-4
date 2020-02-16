@@ -1,48 +1,33 @@
-from peewee import *
-
-# Database
-db = SqliteDatabase('jugglers.sqlite')
-
-# Model
-class Record(Model):
-    name = CharField()
-    country = CharField()
-    record = CharField()
-
-    class Meta:
-        database = db
+from model import Record    
     
-    def __str__(self):
-        return f"{self.name} from {self.country}s' record is {self.record}."
+class View:
 
-# Connect and create db
-db.connect()
-db.create_tables([Record])
+    def __init__(self,view_model):
+        self.view_model = view_model
 
-# MAIN
-def main():
-    choice = ' '
-    # menu
-    while choice.upper()!= 'Q':
-        choice = input('Would you like to...\n1.Add New Record Holder\n2.Search For Record Holder\n3.Show All Records\n4.Update A Record\n5.Delete a Record\nQ.Quit\n\n')
-        print()
-        if choice == '1':
-            add_new_record_holder()
-        elif choice == '2':
-            search_for_RH()
-        elif choice =='3':
-            find_all_records()
-        elif choice == '4':
-            update_record()
-        elif choice == '5':
-            delete_record()
-        else:
-            print('Please enter a valid menu option, numbers 1-5 or q for quit.\n')
-
-    print('\nThanks for using the Chainsaw Juggling Record Database\n')
+    def make_menu(self):
+        choice = ' '
+        # menu
+        while choice.upper()!= 'Q':
+            choice = input('Would you like to...\n1.Add New Record Holder\n2.Search For Record Holder\n3.Show All Records\n4.Update A Record\n5.Delete a Record\nQ.Quit\n\n')
+            print()
+            if choice == '1':
+                add_new_record_holder(self)
+            elif choice == '2':
+                self.search_for_RH()
+            elif choice =='3':
+                self.find_all_records()
+            elif choice == '4':
+                self.update_record()
+            elif choice == '5':
+                self.delete_record()
+            elif choice == 'q':
+                print('\nThanks for using the Chainsaw Juggling Record Database\n')
+            else:
+                print('Please enter a valid menu option, numbers 1-5 or q for quit.\n')
 
 # ADD RECORD
-def add_new_record_holder():
+def add_new_record_holder(self):
     name = input('What is the name of daredevil? ')
     country = input('What country does this person come from? ')
     record = input('What is their record for catches? ')
@@ -52,13 +37,11 @@ def add_new_record_holder():
         print('Please enter full name, country name and a number to input a record.\n')
         return
     # ORM 
-    juggler = Record(name=name, country=country, record=record)
-    juggler.save()
-    # Confirmation
-    print(f"{juggler.name}s' has been saved\n")
+    self.insert(name, country, record)
+    
 
 # SEARCH
-def search_for_RH(name = ''):
+def search_for_RH(self,name = ''):
     # input validation for method reuse
     if len(name)==0:
         name = input('What is the name of the juggler? ')
@@ -74,7 +57,7 @@ def search_for_RH(name = ''):
         print('\n'+str(dPoint)+'\n')
 
 # DISPLAY ALL DATA 
-def find_all_records():
+def find_all_records(self):
     # Made this for testing purposes
     data = Record.select()
     if data.exists():
@@ -84,7 +67,7 @@ def find_all_records():
         print('There are no records. Please enter some if you know of them!\n')
 
 # UPDATE
-def update_record():
+def update_record(self):
     name = input("What is the name of the person whos' record you want to update? ")
     record = input('What is the new number of catches? ')
     print()
@@ -97,7 +80,7 @@ def update_record():
     search_for_RH(name)
     
 # DELETE
-def delete_record():
+def delete_record(self):
     # Confirming with user that record should in fact be deleted
     while True:
         name = input("What is the name of the person who's record you want to delete? ")
@@ -112,6 +95,3 @@ def delete_record():
     if rows_deleted == 0:
         print('There was an error. You might want to check on what is in the records and contact your developer.')
     print(f'The record for {name} was deleted.\n')
-
-if __name__ == '__main__':
-    main()
